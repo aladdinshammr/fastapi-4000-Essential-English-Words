@@ -74,15 +74,15 @@ pip install -r requirements.txt
 Create a `.env` file:
 
 ```
-export DATABASE_HOST=localhost
-export DATABASE_PORT=5432
-export DATABASE_NAME=database_name
-export DATABASE_USER=user
-export DATABASE_PASSWORD=password
-export BASE_URL=http://localhost:8000
-export SECRET_KEY=your_secret_key
-export ALGORITHM=HS256
-export ACCESS_TOKEN_EXPIRE_MINUTES=3000
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_NAME=database_name
+DATABASE_USER=user
+DATABASE_PASSWORD=password
+BASE_URL=http://localhost:8000
+SECRET_KEY=your_secret_key
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=3000
 ```
 
 ---
@@ -98,7 +98,7 @@ alembic upgrade head
 ### 6. Run the server
 
 ```
-uvicorn app.main:app --reload
+fastapi dev
 ```
 
 ---

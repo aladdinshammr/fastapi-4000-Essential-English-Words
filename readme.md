@@ -35,13 +35,13 @@ Designed with clean architecture and scalable backend practices, this project de
 
 ```
 app/
-├── api/            # API routes
-├── core/           # Config & security
-├── models/         # Database models
-├── schemas/        # Pydantic schemas
-├── services/       # Business logic
-├── db/             # Database connection
-└── main.py         # Entry point
+├── routers/            # API routes
+├── config.py           # Config & security
+├── models.py           # Database models
+├── schemas.py          # Pydantic schemas
+├── utils.py            # utilities functions
+├── database.py         # Database connection
+└── main.py             # Entry point
 ```
 
 ---

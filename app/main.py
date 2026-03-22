@@ -34,6 +34,6 @@ app.include_router(index.router)
 app.include_router(user.router)
 
 
-# @app.get("/")
-# def root():
-#     return "Up"
+@app.get("/")
+def root():
+    return "Up"

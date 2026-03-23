@@ -163,10 +163,9 @@ Response:
 ## 🧩 Future Improvements
 
 - 🚀 Add pagination & filtering
-- 🔍 Full-text search
+- 👍 Add voting feature
 - ⚡ Redis caching
 - 🐳 Docker support
-- 🌍 Deploy to cloud (AWS / Render / Railway)
 - 🧪 Add unit & integration tests
 
 ---

@@ -8,9 +8,12 @@ router = APIRouter(tags=["Authentication"])
 
 
 @router.post(
-    "/users", response_model=schemas.UserOut, status_code=status.HTTP_201_CREATED
+    "/users",
+    response_model=schemas.UserOut,
+    status_code=status.HTTP_201_CREATED,
+    description="Register a new account",
 )
-def register(
+def sign_up(
     user: schemas.User,
     db: Session = Depends(database.get_db),
 ):
@@ -27,7 +30,11 @@ def register(
     return new_user
 
 
-@router.get("/users/{id}", response_model=schemas.UserOut)
+@router.get(
+    "/users/{id}",
+    response_model=schemas.UserOut,
+    description="Get user info",
+)
 def get_user(
     id: int,
     db: Session = Depends(database.get_db),
@@ -41,7 +48,10 @@ def get_user(
     return user
 
 
-@router.post("/login")
+@router.post(
+    "/login",
+    response_model=schemas.Token,
+)
 def login(
     user_cred: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(database.get_db),

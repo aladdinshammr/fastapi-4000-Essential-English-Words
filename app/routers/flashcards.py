@@ -8,7 +8,11 @@ from .. import database, models, schemas
 router = APIRouter(prefix="/flashcards", tags=["Flashcards"])
 
 
-@router.get("/", response_model=List[schemas.Flashcard])
+@router.get(
+    "/",
+    response_model=List[schemas.Flashcard],
+    description="Returns a list of flashcards, change parameters if needed.",
+)
 def get_flashcards(
     unit: int = Query(None, ge=1, le=180),
     skip: int = 0,
@@ -37,8 +41,15 @@ def get_flashcards(
     return flashcards
 
 
-@router.get("/{flashcard}", response_model=schemas.Flashcard)
-def get_flashcard_by_word(flashcard: str, db: Session = Depends(database.get_db)):
+@router.get(
+    "/{flashcard}",
+    response_model=schemas.Flashcard,
+    description="Vocabulary search by word.",
+)
+def get_flashcard_by_word(
+    flashcard: str,
+    db: Session = Depends(database.get_db),
+):
     word = db.query(models.Word).filter(models.Word.word == flashcard.lower()).first()
     if not word:
         raise HTTPException(

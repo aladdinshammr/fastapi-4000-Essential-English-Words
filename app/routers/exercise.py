@@ -5,10 +5,18 @@ from typing import List
 from .. import schemas, models, database
 
 
-router = APIRouter(prefix="/exercises", tags=["Exercises"])
+router = APIRouter(
+    prefix="/exercises",
+    tags=["Exercises"],
+)
 
 
-@router.get("/", response_model=List[schemas.Exercise])
+@router.get(
+    "/",
+    response_model=List[schemas.Exercise],
+    summary="Get Exercises",
+    description="Returns a list of all or some exercises, change parameters if needed. ",
+)
 def get_exercises(
     unit_num: int = Query(None, ge=1, le=180),
     db: Session = Depends(database.get_db),
@@ -32,8 +40,12 @@ def get_exercises(
     return exercise
 
 
-@router.get("/answer-key", response_model=List[schemas.AnswerKey] | schemas.AnswerKey)
-def get_answer_key(
+@router.get(
+    "/answer-keys",
+    response_model=List[schemas.AnswerKey] | schemas.AnswerKey,
+    description="Returns a single or a list of exercises answers keys, change parameters if needed.",
+)
+def get_answer_keys(
     unit_num: int = Query(None, ge=1, le=180),
     db: Session = Depends(database.get_db),
 ):

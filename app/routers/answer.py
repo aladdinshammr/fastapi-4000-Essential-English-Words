@@ -6,10 +6,15 @@ from typing import List
 from .. import schemas, models, database, auth2
 
 
-router = APIRouter(prefix="/answers", tags=["Answer"])
+router = APIRouter(prefix="/answers", tags=["Answers"])
 
 
-@router.get("/reading-comperhension", response_model=List[schemas.UserAnswerRespone])
+@router.get(
+    "/reading-comperhension",
+    response_model=List[schemas.UserAnswerRespone],
+    summary="Get All User Comperhension Answers",
+    description="Return a list of user reading comperhension answers, change the parameters if needed",
+)
 def get_reading_comperhension_answers(
     unit_num: int = Query(None, ge=1, le=180),
     db: Session = Depends(database.get_db),
@@ -36,7 +41,13 @@ def get_reading_comperhension_answers(
     return answers
 
 
-@router.post("/reading-comperhension", response_model=schemas.UserAnswerRespone)
+@router.post(
+    "/reading-comperhension",
+    response_model=schemas.UserAnswerRespone,
+    summary="Add a user answer",
+    description="add user answers for reading comperhension execises",
+    status_code=status.HTTP_201_CREATED,
+)
 def answer_reading_comperhension(
     user_answer: schemas.UserAnswer,
     db: Session = Depends(database.get_db),
@@ -65,7 +76,13 @@ def answer_reading_comperhension(
     return new_answer
 
 
-@router.put("/reading-comperhension")
+@router.put(
+    "/reading-comperhension",
+    response_model=schemas.UserAnswer,
+    summary="Update users answers",
+    description="Update user answers for reading comperhension exercises",
+    status_code=status.HTTP_200_OK,
+)
 def update_reading_comperhention_answer(
     user_answer: schemas.UserAnswer,
     db: Session = Depends(database.get_db),
@@ -82,7 +99,6 @@ def update_reading_comperhention_answer(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"You have no answers to be updated",
         )
-    print(user_answer)
     # query.update(user_answer.model_dump(), synchronize_session=False)
     answer.answer = user_answer.answer  # type: ignore
     db.commit()
@@ -90,7 +106,11 @@ def update_reading_comperhention_answer(
     return answer
 
 
-@router.delete("/reading-comperhension/{unit_num}")
+@router.delete(
+    "/reading-comperhension/{unit_num}",
+    summary="Delete user answers.",
+    description="Delete user answers for reading comperhension exercises",
+)
 def delete_reading_comperhension_answer(
     unit_num: int,
     db: Session = Depends(database.get_db),

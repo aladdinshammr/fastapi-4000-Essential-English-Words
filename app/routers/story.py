@@ -4,10 +4,14 @@ from sqlalchemy.orm import Session
 from typing import List
 
 
-router = APIRouter(prefix="/stories", tags=["Reading"])
+router = APIRouter(prefix="/stories", tags=["Readings (Stroies)"])
 
 
-@router.get("/", response_model=schemas.Story | List[schemas.Story])
+@router.get(
+    "/",
+    response_model=schemas.Story | List[schemas.Story],
+    description="Get a list of stories or a single story",
+)
 def get_stories(
     unit_num: int = Query(None, ge=1, le=180),
     db: Session = Depends(database.get_db),
@@ -27,7 +31,11 @@ def get_stories(
     return stories
 
 
-@router.get("/comprehension", response_model=List[schemas.Exercise])
+@router.get(
+    "/comprehension",
+    response_model=List[schemas.Exercise],
+    description="Get a list of reading comprehension exercises,change parameters if needed",
+)
 def get_reading_comprehension(
     unit_num: int = Query(None, ge=1, le=180),
     skip: int = 0,
@@ -61,8 +69,12 @@ def get_reading_comprehension(
     return reading_comperhention
 
 
-@router.get("/answer-key", response_model=List[schemas.AnswerKey] | schemas.AnswerKey)
-def get_answer_key(
+@router.get(
+    "/answer-keys",
+    response_model=List[schemas.AnswerKey] | schemas.AnswerKey,
+    description="returns a list of reading comperhension answer keys change parameters if needed",
+)
+def get_answer_keys(
     unit_num: int = Query(None, ge=1, le=180),
     db: Session = Depends(database.get_db),
 ):

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, Path, HTTPException, status
 from sqlalchemy.orm import Session
 from enum import Enum
+from typing import List
 
 
 from .. import database, models, schemas
@@ -15,12 +16,15 @@ class BookNum(int, Enum):
     book6 = 6
 
 
-router = APIRouter(tags=["Index"], prefix="/indexs")
+router = APIRouter(tags=["Indexes"], prefix="/indexes")
 
 
-@router.get("/book/{book_num}")
+@router.get(
+    "/book/{book_num}",
+    response_model=List[schemas.Words],
+    description="Returns a list of words which every book covers",
+)
 def get_words_by_book(
-    # book_num: int = Path(..., gt=0, lt=6, description="Book number between 1 and 6"),
     book_num: BookNum,
     db: Session = Depends(database.get_db),
 ):
@@ -28,7 +32,11 @@ def get_words_by_book(
     return words
 
 
-@router.get("/{letter}")
+@router.get(
+    "/{letter}",
+    response_model=List[schemas.Words],
+    description="Returns a list of words which all books contains grouped by letter",
+)
 def get_words_by_letter(
     letter: str = Path(
         ...,

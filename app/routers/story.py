@@ -1,19 +1,40 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status, Query, Path
 from .. import schemas, database, models
 from sqlalchemy.orm import Session
 from typing import List
 
 
-router = APIRouter(prefix="/stories", tags=["Readings (Stroies)"])
+router = APIRouter(
+    prefix="/stories",
+    tags=["Readings (Stroies)"],
+)
+
+
+@router.get("/", response_model=List[schemas.Story])
+def get_stories(
+    skip: int = 0,
+    limit: int = 10,
+    db: Session = Depends(database.get_db),
+):
+    stories = (
+        db.query(models.Reading)
+        .filter(models.Reading.type == "story")
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+    return stories
 
 
 @router.get(
-    "/",
-    response_model=schemas.Story | List[schemas.Story],
-    description="Get a list of stories or a single story",
+    "/{unit_num}",
+    response_model=schemas.Story,
+    summary="Get a story",
 )
-def get_stories(
-    unit_num: int = Query(None, ge=1, le=180),
+def get_story(
+    unit_num: int = Path(
+        ..., ge=1, le=180, description="Unit number between 1 and 180"
+    ),
     db: Session = Depends(database.get_db),
 ):
     stories = ""

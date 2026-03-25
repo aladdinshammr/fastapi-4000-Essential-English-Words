@@ -1,4 +1,12 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    Text,
+    ForeignKey,
+    DateTime,
+    UniqueConstraint,
+)
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from .database import Base
@@ -16,6 +24,9 @@ class Unit(Base):
     readings = relationship("Reading", back_populates="unit", cascade="all, delete")
     reading_answers = relationship(
         "ReadingAnswer", back_populates="unit", cascade="all, delete"
+    )
+    exercise_answers = relationship(
+        "ExerciseAnswer", back_populates="unit", cascade="all, delete"
     )
 
 
@@ -82,6 +93,9 @@ class User(Base):
     reading_answers = relationship(
         "ReadingAnswer", back_populates="user", cascade="all, delete"
     )
+    exercise_answers = relationship(
+        "ExerciseAnswer", back_populates="user", cascade="all, delete"
+    )
 
 
 class ReadingAnswer(Base):
@@ -98,3 +112,21 @@ class ReadingAnswer(Base):
 
     unit = relationship("Unit", back_populates="reading_answers")
     user = relationship("User", back_populates="reading_answers")
+
+
+class ExerciseAnswer(Base):
+    __tablename__ = "exercise_answers"
+    id = Column(Integer, primary_key=True, nullable=False)
+    unit_id = Column(
+        Integer, ForeignKey("units.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    user_id = Column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    answer = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    unit = relationship("Unit", back_populates="exercise_answers")
+    user = relationship("User", back_populates="exercise_answers")
+
+    __table_args__ = (UniqueConstraint("unit_id", "user_id", name="uq_unit_user"),)

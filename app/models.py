@@ -44,6 +44,9 @@ class Word(Base):
     image = Column(String)
     sound = Column(String)
     vi = Column(String)
+    learned_words = relationship(
+        "LearnedWord", back_populates="word", cascade="all, delete"
+    )
 
     unit = relationship("Unit", back_populates="words")
 
@@ -104,6 +107,9 @@ class User(Base):
     user_logins = relationship(
         "UserLogin", back_populates="user", cascade="all, delete"
     )
+    learned_words = relationship(
+        "LearnedWord", back_populates="user", cascade="all, delete"
+    )
 
 
 class ReadingAnswer(Base):
@@ -149,3 +155,19 @@ class UserLogin(Base):
     login_time = Column(DateTime(timezone=True), server_default=func.now())
 
     user = relationship("User", back_populates="user_logins")
+
+
+class LearnedWord(Base):
+    __tablename__ = "learned_words"
+    id = Column(Integer, primary_key=True)
+    user_id = Column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    word_id = Column(
+        Integer, ForeignKey("words.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    word = relationship("Word", back_populates="learned_words")
+    user = relationship("User", back_populates="learned_words")
+    __table_args__ = (UniqueConstraint("user_id", "word_id", name="uq_user_word"),)

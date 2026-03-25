@@ -3,7 +3,18 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 
-from .routers import index, flashcards, story, exercise, unit, user, answer, streak
+from .routers import (
+    index,
+    flashcards,
+    story,
+    exercise,
+    unit,
+    user,
+    answer,
+    streak,
+    learned_words,
+    leader_board,
+)
 
 
 app = FastAPI(
@@ -28,11 +39,13 @@ app.mount("/media", StaticFiles(directory="media"), name="media")
 app.include_router(unit.router)
 app.include_router(story.router)
 app.include_router(flashcards.router)
+app.include_router(learned_words.router)
 app.include_router(exercise.router)
 app.include_router(answer.router)
 app.include_router(index.router)
 app.include_router(user.router)
 app.include_router(streak.router)
+app.include_router(leader_board.router)
 
 
 @app.get("/")

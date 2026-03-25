@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status, Query, Response
 from sqlalchemy.orm import Session
 from typing import List
 
-from .. import database, models, schemas
+from .. import database, models, schemas, auth2
 
 
 router = APIRouter(prefix="/flashcards", tags=["Flashcards"])

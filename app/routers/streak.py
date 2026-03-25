@@ -7,7 +7,7 @@ from .. import models, database, schemas, utils, auth2
 router = APIRouter(prefix="/streak", tags=["Streak"])
 
 
-@router.get("/streak")
+@router.get("/")
 def get_streak(current_user=Depends(auth2.get_current_user)):
     return {
         "current_streak": current_user.current_streak,

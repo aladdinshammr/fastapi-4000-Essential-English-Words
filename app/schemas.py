@@ -126,3 +126,27 @@ class UserAnswerRespone(UserAnswer):
     id: int
     created_at: datetime
     user_id: int
+
+
+class UserResponse(BaseModel):
+    email: str
+
+
+class WordResponse(BaseModel):
+    word: str
+
+
+class LearnedWordResponse(BaseModel):
+    created_at: datetime
+    user: UserResponse
+    word: WordResponse
+
+    model_config = {"from_attributes": True}
+
+
+class LeaderboardEntry(BaseModel):
+    user_id: int
+    email: str
+    learned_count: int
+
+    model_config = {"from_attributes": True}

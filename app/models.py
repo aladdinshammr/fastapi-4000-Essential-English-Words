@@ -44,7 +44,7 @@ class Exercise(Base):
 
     title = Column(String)
     content = Column(Text)
-    type = Column(String, index=True)  # exercise / answer
+    type = Column(String, index=True)
 
     unit = relationship("Unit", back_populates="exercises")
 
@@ -65,7 +65,7 @@ class Reading(Base):
 
 
 class Index(Base):
-    __tablename__ = "indexs"
+    __tablename__ = "indexes"
     id = Column(Integer, primary_key=True)
     book = Column(Integer, nullable=False)
     letter = Column(String, nullable=False)

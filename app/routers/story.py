@@ -33,7 +33,7 @@ def get_stories(
 
 @router.get(
     "/comprehension",
-    response_model=List[schemas.Exercise],
+    response_model=List[schemas.Exercise] | schemas.Exercise,
     description="Get a list of reading comprehension exercises,change parameters if needed",
 )
 def get_reading_comprehension(
@@ -83,14 +83,14 @@ def get_answer_keys(
         answer_key = (
             db.query(models.Reading)
             .filter(
-                (models.Reading.type == None) & (models.Reading.unit_id == unit_num)
+                (models.Reading.type == "answer") & (models.Reading.unit_id == unit_num)
             )
             .first()
         )
 
     else:
         answer_key = (
-            db.query(models.Reading).filter((models.Reading.type == None)).all()
+            db.query(models.Reading).filter((models.Reading.type == "answer")).all()
         )
 
     return answer_key

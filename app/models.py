@@ -96,6 +96,9 @@ class User(Base):
     exercise_answers = relationship(
         "ExerciseAnswer", back_populates="user", cascade="all, delete"
     )
+    user_logins = relationship(
+        "UserLogin", back_populates="user", cascade="all, delete"
+    )
 
 
 class ReadingAnswer(Base):
@@ -130,3 +133,14 @@ class ExerciseAnswer(Base):
     user = relationship("User", back_populates="exercise_answers")
 
     __table_args__ = (UniqueConstraint("unit_id", "user_id", name="uq_unit_user"),)
+
+
+class UserLogin(Base):
+    __tablename__ = "user_logins"
+    id = Column(Integer, primary_key=True)
+    user_id = Column(
+        Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    login_time = Column(DateTime(timezone=True), server_default=func.now())
+
+    user = relationship("User", back_populates="user_logins")

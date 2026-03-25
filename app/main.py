@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 
-from .routers import index, flashcards, story, exercise, unit, user, answer
+from .routers import index, flashcards, story, exercise, unit, user, answer, streak
 
 
 app = FastAPI(
@@ -32,6 +32,7 @@ app.include_router(exercise.router)
 app.include_router(answer.router)
 app.include_router(index.router)
 app.include_router(user.router)
+app.include_router(streak.router)
 
 
 @app.get("/")

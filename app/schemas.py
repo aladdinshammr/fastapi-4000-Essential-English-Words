@@ -1,5 +1,5 @@
 from pydantic import BaseModel, computed_field, EmailStr
-from datetime import datetime
+from datetime import datetime, date
 from typing import List
 
 from .config import settings
@@ -101,6 +101,9 @@ class User(BaseModel):
 class UserOut(BaseModel):
     id: int
     email: EmailStr
+    current_streak: int
+    longest_streak: int
+    last_active_date: date
     created_at: datetime
     model_config = {"from_attributes": True}
 

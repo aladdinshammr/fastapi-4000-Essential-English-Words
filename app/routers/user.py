@@ -2,9 +2,41 @@ from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from .. import schemas, database, models, utils, auth2
+from datetime import date
 
 
 router = APIRouter(tags=["Authentication"])
+
+
+def update_streak(user, db: Session):
+    today = date.today()
+
+    if not user.last_active_date:
+        user.current_streak = 1
+        user.longest_streak = 1
+        user.last_active_date = today
+
+    else:
+        delta = (today - user.last_active_date).days
+
+        if delta == 0:
+            return user
+
+        elif delta == 1:
+            user.current_streak += 1
+
+        else:
+            user.current_streak = 1
+
+    if user.current_streak > user.longest_streak:
+        user.longest_streak = user.current_streak
+
+    user.last_active_date = today
+
+    db.commit()
+    db.refresh(user)
+
+    return user
 
 
 @router.post(
@@ -67,4 +99,9 @@ def login(
             status_code=status.HTTP_403_FORBIDDEN, detail=f"Invalid Credentials"
         )
     access_token = auth2.create_access_token({"id": user.id})
+    new_login = models.UserLogin(user_id=user.id)
+    db.add(new_login)
+    db.commit()
+    db.refresh(new_login)
+    update_streak(user=user, db=db)
     return schemas.Token(access_token=access_token, token_type="bearer")

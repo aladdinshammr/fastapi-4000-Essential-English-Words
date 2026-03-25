@@ -6,6 +6,7 @@ from sqlalchemy import (
     ForeignKey,
     DateTime,
     UniqueConstraint,
+    Date,
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -89,6 +90,10 @@ class User(Base):
     email = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    current_streak = Column(Integer, default=0)
+    longest_streak = Column(Integer, default=0)
+    last_active_date = Column(Date, nullable=True)
 
     reading_answers = relationship(
         "ReadingAnswer", back_populates="user", cascade="all, delete"

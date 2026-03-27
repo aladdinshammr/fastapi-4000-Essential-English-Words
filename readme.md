@@ -95,7 +95,15 @@ alembic upgrade head
 
 ---
 
-### 6. Run the server
+### 6. Insert initial data (seeding DB)
+
+```
+python scripts/init_data.py
+```
+
+---
+
+### 7. Run the server
 
 ```
 fastapi dev

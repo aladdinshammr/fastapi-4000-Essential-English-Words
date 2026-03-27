@@ -14,28 +14,26 @@ def update_streak(user, db: Session):
     if not user.last_active_date:
         user.current_streak = 1
         user.longest_streak = 1
-        user.last_active_date = today
-
     else:
-        delta = (today - user.last_active_date).days
+        last_date = user.last_active_date
+        if hasattr(last_date, "date"):
+            last_date = last_date.date()
+        delta = (today - last_date).days
 
         if delta == 0:
-            return user
-
+            pass
         elif delta == 1:
             user.current_streak += 1
-
         else:
             user.current_streak = 1
+
+    user.last_active_date = today
 
     if user.current_streak > user.longest_streak:
         user.longest_streak = user.current_streak
 
-    user.last_active_date = today
-
     db.commit()
     db.refresh(user)
-
     return user
 
 

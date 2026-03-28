@@ -53,7 +53,7 @@ def sign_up(
             status_code=status.HTTP_409_CONFLICT, detail="Email already registered"
         )
     user.password = utils.get_password_hash(user.password)
-    new_user = models.User(**user.model_dump())
+    new_user = models.User(**user.model_dump(), last_active_date=(date.today()))
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
